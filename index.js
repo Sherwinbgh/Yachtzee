@@ -11,9 +11,8 @@ let transformvalues=[
 const player1Container=document.getElementById("player1Container");
 const player2Container=document.getElementById("player2Container");
 const diceElements=document.querySelectorAll(".dice");
-const rollbutton= document.getElementById("roll");
+const rollbutton= document.getElementById("Roll");
 const scoreTableCells=document.querySelectorAll(".cell");
-rollbutton.addEventListener("click",rolldice);
 function rolldice(){
     rollcount++;
     let diceArr=[1,2,3,4,5];

@@ -79,8 +79,6 @@ html,body{
   }
   
   #board{
-    background:url(yahtzee.jpg);
-    background-repeat: no-repeat;
     background-size: cover;
     width:60%;
     min-height: 80%;
@@ -136,7 +134,6 @@ html,body{
     align-self: flex-end;
     color: black;
     font-weight: bold;
-    background-image: url("button.png");
     background-size: cover;
     cursor: pointer;
   }
