@@ -17,9 +17,10 @@ function rolldice(){
     rollcount++;
     let diceArr=[1,2,3,4,5];
     let randomDice=[];
-    for (let i=0; i < diceArr.length; i++) {
+    for (let i=0; i < diceArr.length;i++) {
         randomDice.push(Math.floor(Math.random()*6)+1);
     }
+
     let playArea=document.getElementById("playarea");
     let diceContainer=document.getElementById("player1Container");
     let numdice=diceContainer.children.length;
@@ -58,7 +59,7 @@ function changeDiePosotion(diceElement,x,y){
     x +"vw) translateY("+diceRollDirection*y+
     "vh) rotate(" + angle + "deg)";
 }
-function chamgediceFaces(randomDice) {
+function changediceFaces(randomDice) {
     for (let i=0; i < diceElements.length;i++) {
         if(rollcount ===1) diceElements[1].classList.add("active");
         if(diceElements[i].classList.contains("active")) {
@@ -93,3 +94,81 @@ diceElements.forEach(function(diceElement,index){
         }
     })
 })
+
+function calculateOnes(dice) {
+    let score=0;
+    for (let i=0; i < dice.length; i++){
+        if(dice[i]===1) {
+            score+=1;
+        }
+    }
+    return score;
+}
+
+function calculateTwos(dice) {
+    let score=0;
+    for (let i=0; i < dice.length; i++){
+        if(dice[i]===2) {
+            score+=2;
+        }
+    }
+    return score;
+}
+
+function calculateThrees(dice) {
+    let score=0;
+    for (let i=0; i < dice.length; i++){
+        if(dice[i]===3) {
+            score+=3;
+        }
+    }
+    return score;
+}
+
+function calculatefours(dice) {
+    let score=0;
+    for (let i=0; i < dice.length; i++){
+        if(dice[i]===4) {
+            score+=4;
+        }
+    }
+    return score;
+}
+
+function calculateFives(dice) {
+    let score=0;
+    for (let i=0; i < dice.length; i++){
+        if(dice[i]===5) {
+            score+=5;
+        }
+    }
+    return score;
+}
+
+function calculateSixs(dice) {
+    let score=0;
+    for (let i=0; i < dice.length; i++){
+        if(dice[i]===6) {
+            score+=6;
+        }
+    }
+    return score;
+}
+
+function calculateChances(dice) {
+    let score=0;
+    for (let i=0; i < dice.length; i++){
+        score+=dice[i];
+    }
+    return score;
+}
+
+function calculateYachtzee(dice) {
+    let firstdie=dice[0];
+    for (let i=0; i < dice.length; i++){
+        if(dice[i]===firstdie) {
+            score+=6;
+        }
+    }
+    return score;
+}
