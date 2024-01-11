@@ -172,3 +172,53 @@ function calculateYachtzee(dice) {
     }
     return score;
 }
+function writeTempValuesInScoreTable(dice){
+    let scoreTable=[];
+    scoreTable=player1Score.slice();
+    let playerNumber = 1;
+    if(!isplayeroneturn){
+        scoreTable=[];
+        scoreTable=player2Score.slice();
+        playerNumber= 2;
+    }
+    if(scoreTable[0]===undefined) {
+        let onesScore = calculateOnes(dice);
+        document.getElementById("ones"+playerNumber).innerHTML=onesScore
+    }
+    if(scoreTable[1]===undefined) {
+        let twosScore = calculateTwos(dice);
+        document.getElementById("twos"+playerNumber).innerHTML=twosScore
+    }
+    if(scoreTable[2]===undefined) {
+        let threesScore = calculateThrees(dice);
+        document.getElementById("threes"+playerNumber).innerHTML=threesScore
+    }
+    if(scoreTable[3]===undefined) {
+        let foursScore = calculateFours(dice);
+        document.getElementById("fours"+playerNumber).innerHTML=foursScore
+    }
+    if(scoreTable[4]===undefined) {
+        let fivesScore = calculateFives(dice);
+        document.getElementById("fives"+playerNumber).innerHTML=fivesScore
+    }
+    if(scoreTable[5]===undefined) {
+        let sixsScore = calculateSixs(dice);
+        document.getElementById("sixs"+playerNumber).innerHTML=sixsScore
+    }
+    if(scoreTable[6]===undefined) {
+        let ThreeOfAkindScore = calculateThreeOfAkind(dice);
+        document.getElementById("ThreeOfAkinds"+playerNumber).innerHTML=ThreeOfAkindScore 
+    }
+    if(scoreTable[7]===undefined) {
+        let FourOfAkindScore = calculateFourOfAkind(dice);
+        document.getElementById("fourOfAkinds"+playerNumber).innerHTML=FourOfAkindScore 
+    }
+    if(scoreTable[8]===undefined) {
+        let FullhouceScore = calculateFullhouce(dice);
+        document.getElementById("Fullhouces"+playerNumber).innerHTML=FullhouceScore
+    }
+    if(scoreTable[9]===undefined) {
+        let FullhouceScore = calculateFullhouce(dice);
+        document.getElementById("Fullhouces"+playerNumber).innerHTML=FullhouceScore
+    }
+}
