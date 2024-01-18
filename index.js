@@ -13,6 +13,7 @@ const player1Container=document.getElementById("player1Container");
 const player2Container=document.getElementById("player2Container");
 const diceElements=document.querySelectorAll(".dice");
 const rollbutton= document.getElementById("Roll");
+const scoreTable = document.querySelectorAll(".cell");
 rollbutton.addEventListener("click",rolldice);
 const scoreTableCells=document.querySelectorAll(".cell");
 function rolldice(){
@@ -248,7 +249,7 @@ function calculateSmallstraight(dice){
     return score;
 }
 
-function calculateSmallstraight(dice){
+function calculateLargestraight(dice){
     let score=0;
     let dicecopy=[...new setInterval(dice)];
     dicecopy.sort();
@@ -324,4 +325,47 @@ function writeTempValuesInScoreTable(dice){
         let YachtzeeScore = calculateYachtzee(dice);
         document.getElementById("Yachtzee"+playerNumber).innerHTML=YachtzeeScore
     }
+}
+///Scoretable funtioneren
+scoreTableCells.forEach(function(cell){
+    cell.addEventListener("click".oncellclick);
+});
+function oncellclick(){
+    let row=this.getAttribute("data-row");
+    let column=this.getAttribute("data-column");
+    if(
+        rollcount=0 ||
+        row===null
+    ) return;
+    if(isplayeroneturn && column==1){
+        player1Score[row-1]=parseInt(this.innerHTML);
+        let upperSectionScore1=calculateUpperSectionScore(player1Score);
+        let bonusScore1=upperSectionScore1>63 ? 35 : 0;
+        let lowerSectionScore1=calculatelowerSectionScore1(player1Score);
+        let totalScore1=upperSectionScore1+lowerSectionScore1+bonusScore1;
+        sum1.innerHTML=upperSectionScore1;
+        bonus1.innerHTML=bonusScore1;
+        total1.innerHTML=totalScore1;
+        this.style.color="green";
+        sum1.style.color="green";
+        bonus1.style.color="green";
+        total1.style.color="green";
+        changeTurn();
+    }
+    if(!isplayeroneturn && column==2){
+        player2Score[row-1]=parseInt(this.innerHTML);
+        let upperSectionScore2=calculateUpperSectionScore(player2Score);
+        let bonusScore2=upperSectionScore2>63 ? 35 : 0;
+        let lowerSectionScore2=calculatelowerSectionScore1(player2Score);
+        let totalScore2=upperSectionScore2+lowerSectionScore2+bonusScore2;
+        sum1.innerHTML=upperSectionScore2;
+        bonus1.innerHTML=bonusScore2;
+        total1.innerHTML=totalScore2;
+        this.style.color="green";
+        sum2.style.color="green";
+        bonus2.style.color="green";
+        total2.style.color="green";
+        changeTurn();
+    }
+    return score;
 }
