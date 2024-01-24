@@ -177,34 +177,36 @@ function calculateYachtzee(dice) {
     return score;
 }
 // tweede gedeelde van scores
-function calculateThreeOfAkinds(dice){
-    let score=0;
-    for(let i=0;i< dice.length;i++){
-        let count=1;
-        for(let j=0;< dice.length; j++) {
-            if(j=== && dice[i]===dice[j]){
+function calculateThreeOfAKind(dice) {
+    let score = 0;
+    for (let i = 0; i < dice.length; i++) {
+        let count = 1;
+
+        for (let j = 0; j < dice.length; j++) {
+            if (i !== j && dice[i] === dice[j]) {
                 count++;
             }
         }
-        if(count>3){
-            score=dice.reduce((acc,val)=>acc+val);
+        if (count >= 3) {
+            score = dice.reduce((acc, val) => acc + val);
             break;
         }
     }
     return score;
 }
 
-function calculateFourOfAkinds(dice){
-    let score=0;
-    for(let i=0;i< dice.length;i++){
-        let count=1;
-        for(let j=0;< dice.length; j++) {
-            if(j=== && dice[i]===dice[j]){
+function calculateFourOfAKind(dice) {
+    let score = 0;
+
+    for (let i = 0; i < dice.length; i++) {
+        let count = 1;
+        for (let j = 0; j < dice.length; j++) {
+            if (i !== j && dice[i] === dice[j]) {
                 count++;
             }
         }
-        if(count>4){
-            score=dice.reduce((acc,val)=>acc+val);
+        if (count >= 4) {
+            score = dice.reduce((acc, val) => acc + val);
             break;
         }
     }
@@ -368,4 +370,28 @@ function oncellclick(){
         changeTurn();
     }
     return score;
+}
+//scores van upper and down sections bijelkaar
+function calculateUpperSectionScore(playerScore){
+    let score=0;
+    let ones=playerScore[0]==undefined ? 0 : playerScore[0];
+    let twos=playerScore[1]==undefined ? 0 : playerScore[1];
+    let threes=playerScore[2]==undefined ? 0 : playerScore[2];
+    let fours=playerScore[3]==undefined ? 0 : playerScore[3];
+    let fives=playerScore[4]==undefined ? 0 : playerScore[4];
+    let sixs=playerScore[5]==undefined ? 0 : playerScore[5];
+    score=ones+twos+threes+fours+fives+sixs;
+    return score;
+}
+function calculateclowerSectionScore(playerScore){
+    let lowerSectionScore=0;
+    let ThreeOfAkinds=playerScore[6]==undefined ? 0 : playerScore[6];
+    let fourOfAkinds=playerScore[7]==undefined ? 0 : playerScore[7];
+    let Fullhouces=playerScore[8]==undefined ? 0 : playerScore[8];
+    let Smallstraight=playerScore[9]==undefined ? 0 : playerScore[9];
+    let Largestraight=playerScore[10]==undefined ? 0 : playerScore[10];
+    let Chance=playerScore[11]==undefined ? 0 : playerScore[11];
+    let Yachtzee=playerScore[12]==undefined ? 0 : playerScore[12];
+    lowerSectionScore=ThreeOfAkinds+fourOfAkinds+Fullhouces+Smallstraight+Largestraight+Chance+Yachtzee;
+    return lowerSectionScore;
 }

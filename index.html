@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yahtzee</title>
-    <link rel="StyleSheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yachtzee</title>
+  <link rel="Stylesheet" href="style.css">
 </head>
 <body>
-    <!--Game board en fotos -->
-  <div id="gameContainer">
-  <div id="board">
-    <div class="dice-container" id="player2Container"></div>
-    <div id="playArea">
-      <div id="endGameMessage"></div>
-      <button id="roll" class="image-button" type="button">ROLL</button>
+  <div id="gamecontainer">
+  <div class="dice-container" id="player2Container"></div>
+  <div id="playArea">
+    <div id="endGameMessage"></div>
+    <button id="roll">Roll</button>
+  </div>
+  <div class="dice-container" id="player1Container">
+    <div class="dice" id="die1">
+      <img src="dice_images/Dice-1.png" alt="" class="face">
     </div>
-    <div class="dice-container" id="player1Container">
-      <div class="dice" id="die1">
-        <img src="dice_images/Dice-1.png" class="face">
-      </div>
-      <div class="dice" id="die2">
-        <img src="dice_images/Dice-2.png" class="face">
-      </div>
-      <div class="dice" id="die3">
-        <img src="dice_images/Dice-3.png" class="face">
-      </div>
-      <div class="dice" id="die4">
-        <img src="dice_images/Dice-4.png" class="face">
-      </div>
-      <div class="dice" id="die5">
-        <img src="dice_images/Dice-5.png" class="face">
-      </div>
+    <div class="dice" id="die2">
+      <img src="dice_images/Dice-2.png" alt="" class="face">
+    </div>
+    <div class="dice" id="die3">
+      <img src="dice_images/Dice-3.png" alt="" class="face">
+    </div>
+    <div class="dice" id="die4">
+      <img src="dice_images/Dice-4.png" alt="" class="face">
+    </div>
+    <div class="dice" id="die5">
+      <img src="dice_images/Dice-5.png" alt="" class="face">
     </div>
   </div>
-  <!--score board met regels -->
   <div id="scoreTable" class="table">
     <div class="header">
       <div class="header-cell"></div>
@@ -43,68 +38,68 @@
     </div>
     <div class="row">
       <div class="cell">Ones</div>
-      <div class="cell" id="ones1" data-row="1" data-column="1"></div>
-      <div class="cell" id="ones2" data-row="1" data-column="2"></div>
+      <div class="cell" id="one1" data-row="1" data-column="1"></div>
+      <div class="cell" id="one2" data-row="1" data-column="2"></div>
     </div>
     <div class="row">
       <div class="cell">Twos</div>
-      <div class="cell" id="twos1" data-row="2" data-column="1"></div>
-      <div class="cell" id="twos2" data-row="2" data-column="2"></div>
+      <div class="cell" id="two1" data-row="2" data-column="1"></div>
+      <div class="cell" id="two2" data-row="2" data-column="2"></div>
     </div>
     <div class="row">
       <div class="cell">Threes</div>
-      <div class="cell" id="threes1" data-row="3" data-column="1"></div>
-      <div class="cell" id="threes2" data-row="3" data-column="2"></div>
+      <div class="cell" id="three1" data-row="3" data-column="1"></div>
+      <div class="cell" id="three2" data-row="3" data-column="2"></div>
     </div>
     <div class="row">
       <div class="cell">Fours</div>
-      <div class="cell" id="fours1" data-row="4" data-column="1"></div>
-      <div class="cell" id="fours2" data-row="4" data-column="2"></div>
+      <div class="cell" id="four1" data-row="4" data-column="1"></div>
+      <div class="cell" id="four2" data-row="4" data-column="2"></div>
     </div>
     <div class="row">
       <div class="cell">Fives</div>
-      <div class="cell" id="fives1" data-row="5" data-column="1"></div>
-      <div class="cell" id="fives2" data-row="5" data-column="2"></div>
+      <div class="cell" id="five1" data-row="5" data-column="1"></div>
+      <div class="cell" id="five2" data-row="5" data-column="2"></div>
     </div>
     <div class="row">
-      <div class="cell">Sixes</div>
-      <div class="cell" id="sixes1" data-row="6" data-column="1"></div>
-      <div class="cell" id="sixes2" data-row="6" data-column="2"></div>
+      <div class="cell">Sixs</div>
+      <div class="cell" id="six1" data-row="6" data-column="1"></div>
+      <div class="cell" id="six2" data-row="6" data-column="2"></div>
     </div>
     <div class="row" id="sumCaption">
       <div class="cell">Sum</div>
-      <div class="cell" id="sum1" ></div>
-      <div class="cell" id="sum2" ></div>
+      <div class="cell" id="sum1"></div>
+      <div class="cell" id="sum2"></div>
     </div>
     <div class="row" id="bonusCaption">
       <div class="cell">Bonus</div>
-      <div class="cell" id="bonus1" ></div>
-      <div class="cell" id="bonus2" ></div>
+      <div class="cell" id="bonus1"></div>
+      <div class="cell" id="bonus2"></div>
     </div>
     <div class="row">
       <div class="cell">Three of a kind</div>
-      <div class="cell" id="threeOfAKind1" data-row="7" data-column="1"></div>
-      <div class="cell" id="threeOfAKind2" data-row="7" data-column="2"></div>
+      <div class="cell" id="Threeofakind1" data-row="7" data-column="1"></div>
+      <div class="cell" id="Threeofakind2" data-row="7" data-column="2"></div>
     </div>
     <div class="row">
       <div class="cell">Four of a kind</div>
-      <div class="cell" id="fourOfAKind1" data-row="8" data-column="1"></div>
-      <div class="cell" id="fourOfAKind2" data-row="8" data-column="2"></div>
+      <div class="cell" id="fourofakind1" data-row="8" data-column="1"></div>
+      <div class="cell" id="fourofakind2" data-row="8" data-column="2"></div>
     </div>
     <div class="row">
-      <div class="cell">Full House</div>
-      <div class="cell" id="fullHouse1" data-row="9" data-column="1"></div>
-      <div class="cell" id="fullHouse2" data-row="9" data-column="2"></div>
+      <div class="cell">Full houce</div>
+      <div class="cell" id="fullhouce1" data-row="9" data-column="1"></div>
+      <div class="cell" id="fullhouce2" data-row="9" data-column="2"></div>
     </div>
     <div class="row">
       <div class="cell">Small straight</div>
-      <div class="cell" id="smallStraight1" data-row="10" data-column="1"></div>
-      <div class="cell" id="smallStraight2" data-row="10" data-column="2"></div>
+      <div class="cell" id="smallstraight1" data-row="10" data-column="1"></div>
+      <div class="cell" id="smallstraight2" data-row="10" data-column="2"></div>
     </div>
     <div class="row">
       <div class="cell">Large straight</div>
-      <div class="cell" id="largeStraight1" data-row="11" data-column="1"></div>
-      <div class="cell" id="largeStraight2" data-row="11" data-column="2"></div>
+      <div class="cell" id="largestraight1" data-row="11" data-column="1"></div>
+      <div class="cell" id="largestraight2" data-row="11" data-column="2"></div>
     </div>
     <div class="row">
       <div class="cell">Chance</div>
@@ -112,17 +107,17 @@
       <div class="cell" id="chance2" data-row="12" data-column="2"></div>
     </div>
     <div class="row">
-      <div class="cell">Yahtzee</div>
-      <div class="cell" id="yahtzee1" data-row="13" data-column="1"></div>
-      <div class="cell" id="yahtzee2" data-row="13" data-column="2"></div>
+      <div class="cell">Yachtzee</div>
+      <div class="cell" id="yachtzee1" data-row="13" data-column="1"></div>
+      <div class="cell" id="yachtzee2" data-row="13" data-column="2"></div>
     </div>
     <div class="row">
-      <div class="cell" id="totalCaption">TOTAL SCORE</div>
-      <div class="cell" id="total1" ></div>
-      <div class="cell" id="total2" ></div>
+      <div class="cell" id="totalCaption">Total score</div>
+      <div class="cell" id="total1" data-row="14" data-column="1"></div>
+      <div class="cell" id="total2" data-row="14" data-column="2"></div>
     </div>
   </div>
 </div>
-    <script src="index.js"></script>
+  <script src="index.js"></script>
 </body>
 </html>
