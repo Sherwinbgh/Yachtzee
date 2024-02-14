@@ -8,7 +8,7 @@ let isplayeroneturn=true;
 let transformvalues=[
     [0,30],[-5.40],[0,35],[5,40],[0,30]
 ];
-// roll dice function die moet bijgewerkt worden
+// roll dice function
 const player1Container=document.getElementById("player1Container");
 const player2Container=document.getElementById("player2Container");
 const diceElements=document.querySelectorAll(".dice");
@@ -16,13 +16,43 @@ const rollbutton= document.getElementById("Roll");
 const scoreTable = document.querySelectorAll(".cell");
 rollbutton.addEventListener("click",rolldice);
 const scoreTableCells=document.querySelectorAll(".cell");
+
 function rolldice(){
+    let die1;
+    let die2;
+    let die3;
+    let die4;
+    let die5;
+
+    const dice1 = document.getElementById("Dice-1");
+    const dice2 = document.getElementById("Dice-2");
+    const dice3 = document.getElementById("Dice-3");
+    const dice4 = document.getElementById("Dice-4");
+    const dice5 = document.getElementById("Dice-5");
+
     rollcount++;
-    let diceArr=[1,2,3,4,5];
     let randomDice=[];
-    for (let i=0; i < diceArr.length;i++) {
-        randomDice.push(Math.floor(Math.random()*6)+1);
-    }
+    die1 = randomNumber();
+    randomDice.push(die1);
+    dice1.src = "dice_images/Dice-" + die1 + ".png";
+
+    die2 = randomNumber();
+    randomDice.push(die2);
+    dice2.src = "dice_images/Dice-" + die2 + ".png";
+
+    die3 = randomNumber();
+    randomDice.push(die3);
+    dice3.src = "dice_images/Dice-" + die3 + ".png";
+
+    die4 = randomNumber();
+    randomDice.push(die4);
+    dice4.src = "dice_images/Dice-" + die4 + ".png";
+
+    die5 = randomNumber();
+    randomDice.push(die5);
+    dice5.src = "dice_images/Dice-" + die5 + ".png";
+
+    console.log(die1);
 
     let playArea=document.getElementById("playarea");
     let diceContainer=document.getElementById("player1Container");
@@ -46,6 +76,11 @@ function rolldice(){
             },500);
         }
     });
+}
+
+function randomNumber() {
+    let random = Math.floor(Math.random()*6)+1;
+    return random;
 }
 function resetDicePositions(){
     diceElements.forEach(function(diceElement){
@@ -99,15 +134,14 @@ diceElements.forEach(function(diceElement,index){
 })
 // eerste gedeelde van scores
 function calculateOnes(dice) {
-    let score=0;
-    for (let i=0; i < dice.length; i++){
-        if(dice[i]===1) {
-            score+=1;
+    let score = 0;
+    dice.forEach(die => {
+        if (die === 1) {
+            score++;
         }
-    }
+    });
     return score;
 }
-
 function calculateTwos(dice) {
     let score=0;
     for (let i=0; i < dice.length; i++){
@@ -158,24 +192,6 @@ function calculateSixs(dice) {
     return score;
 }
 
-function calculateChances(dice) {
-    let score=0;
-    for (let i=0; i < dice.length; i++){
-        score+=dice[i];
-    }
-    return score;
-}
-
-function calculateYachtzee(dice) {
-    let firstdie=dice[0];
-    let score=50;
-    for (let i=0; i < dice.length; i++){
-        if(dice[i]===firstdie) {
-            score=0;
-        }
-    }
-    return score;
-}
 // tweede gedeelde van scores
 function calculateThreeOfAKind(dice) {
     let score = 0;
@@ -266,6 +282,24 @@ function calculateLargestraight(dice){
     }
     return score;
 }
+function calculateChances(dice) {
+    let score=0;
+    for (let i=0; i < dice.length; i++){
+        score+=dice[i];
+    }
+    return score;
+}
+
+function calculateYachtzee(dice) {
+    let firstdie=dice[0];
+    let score=50;
+    for (let i=0; i < dice.length; i++){
+        if(dice[i]===firstdie) {
+            score=0;
+        }
+    }
+    return score;
+}
 function writeTempValuesInScoreTable(dice){
     let scoreTable=[];
     scoreTable=player1Score.slice();
@@ -288,7 +322,7 @@ function writeTempValuesInScoreTable(dice){
         document.getElementById("threes"+playerNumber).innerHTML=threesScore
     }
     if(scoreTable[3]===undefined) {
-        let foursScore = calculateFours(dice);
+        let foursScore = calculatefours(dice);
         document.getElementById("fours"+playerNumber).innerHTML=foursScore
     }
     if(scoreTable[4]===undefined) {
@@ -300,7 +334,7 @@ function writeTempValuesInScoreTable(dice){
         document.getElementById("sixs"+playerNumber).innerHTML=sixsScore
     }
     if(scoreTable[6]===undefined) {
-        let ThreeofakindScore = calculateThreeofakinds(dice);
+        let ThreeofakindScore = calculateThreeOfAKind(dice);
         document.getElementById("ThreeOfAkinds"+playerNumber).innerHTML=ThreeofakindScore
     }
     if(scoreTable[7]===undefined) {
