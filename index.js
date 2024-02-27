@@ -5,18 +5,25 @@ let player2Dice=[];
 let rollcount=0;
 let roundcount=0;
 let isplayeroneturn=true;
-let transformvalues=[
-    [0,30],[-5.40],[0,35],[5,40],[0,30]
-];
 // roll dice function
 const player1Container=document.getElementById("player1Container");
 const player2Container=document.getElementById("player2Container");
 const diceElements=document.querySelectorAll(".dice");
 const rollbutton= document.getElementById("Roll");
 const scoreTable = document.querySelectorAll(".cell");
-rollbutton.addEventListener("click",rolldice);
 const scoreTableCells=document.querySelectorAll(".cell");
-
+const allecells=document.querySelectorAll(".cell");
+let cells=[];
+selectcells();
+function selectcells(){
+    for(var i = 0; i < allecells.length;i++){
+        if(i%3==0){
+            continue
+        }
+        cells.push(allecells[i])
+    }
+}
+// forloop
 function rolldice(){
     let die1;
     let die2;
@@ -31,7 +38,7 @@ function rolldice(){
     const dice5 = document.getElementById("Dice-5");
 
     rollcount++;
-    let randomDice=[];
+ randomDice=[];
     die1 = randomNumber();
     randomDice.push(die1);
     dice1.src = "dice_images/Dice-" + die1 + ".png";
@@ -51,31 +58,6 @@ function rolldice(){
     die5 = randomNumber();
     randomDice.push(die5);
     dice5.src = "dice_images/Dice-" + die5 + ".png";
-
-    console.log(die1);
-
-    let playArea=document.getElementById("playarea");
-    let diceContainer=document.getElementById("player1Container");
-    let numdice=diceContainer.children.length;
-    let playAreawidth=playArea.offsetWidth-numdice*50;
-    let playAreheight=playArea.offsetHeight-50;
-
-    diceElements.forEach(function(diceElement,index){
-        if(diceElement.classList.contains("active")|| rollcount==1){
-            resetDicePositions();
-            const x = transformvalues[index][0];
-            const y = transformvalues[index][1];
-
-            setTimeout(function(){
-                changeDicePosition(diceElement,x,y);
-                changediceFaces(randomDice);
-                if(rollcount==3){
-                    rollbutton.disabled=true;
-                    rollbutton.style.opacity=0,5;
-                }
-            },500);
-        }
-    });
 }
 
 function randomNumber() {
@@ -86,16 +68,6 @@ function resetDicePositions(){
     diceElements.forEach(function(diceElement){
         diceElement.style.transform="none";
     })
-}
-function changeDicePosition(diceElement,x,y){
-    let angle=135*Math.floor(Math.random()*10);
-    let diceRollDirection = -1;
-    if(!isplayeroneturn)diceRollDirection=1;
-    angle=135*Math.floor(Math.random()*10);
-    diceElement.style.transform=
-    "translateX("+
-    x +"vw) translateY("+diceRollDirection*y+
-    "vh) rotate(" + angle + "deg)";
 }
 function changediceFaces(randomDice) {
     for (let i=0; i < diceElements.length;i++) {
@@ -311,60 +283,60 @@ function writeTempValuesInScoreTable(dice){
     }
     if(scoreTable[0]===undefined) {
         let onesScore = calculateOnes(dice);
-        document.getElementById("ones"+playerNumber).innerHTML=onesScore
+        document.getElementById("ones"+playerNumber).innerHTML=onesScore;
     }
     if(scoreTable[1]===undefined) {
         let twosScore = calculateTwos(dice);
-        document.getElementById("twos"+playerNumber).innerHTML=twosScore
+        document.getElementById("twos"+playerNumber).innerHTML=twosScore;
     }
     if(scoreTable[2]===undefined) {
         let threesScore = calculateThrees(dice);
-        document.getElementById("threes"+playerNumber).innerHTML=threesScore
+        document.getElementById("threes"+playerNumber).innerHTML=threesScore;
     }
     if(scoreTable[3]===undefined) {
         let foursScore = calculatefours(dice);
-        document.getElementById("fours"+playerNumber).innerHTML=foursScore
+        document.getElementById("fours"+playerNumber).innerHTML=foursScore;
     }
     if(scoreTable[4]===undefined) {
         let fivesScore = calculateFives(dice);
-        document.getElementById("fives"+playerNumber).innerHTML=fivesScore
+        document.getElementById("fives"+playerNumber).innerHTML=fivesScore;
     }
     if(scoreTable[5]===undefined) {
         let sixsScore = calculateSixs(dice);
-        document.getElementById("sixs"+playerNumber).innerHTML=sixsScore
+        document.getElementById("sixs"+playerNumber).innerHTML=sixsScore;
     }
     if(scoreTable[6]===undefined) {
         let ThreeofakindScore = calculateThreeOfAKind(dice);
-        document.getElementById("ThreeOfAkinds"+playerNumber).innerHTML=ThreeofakindScore
+        document.getElementById("ThreeOfAkinds"+playerNumber).innerHTML=ThreeofakindScore;
     }
     if(scoreTable[7]===undefined) {
         let FourofAkindScore = calculateFourOfAkinds(dice);
-        document.getElementById("fourOfAkinds"+playerNumber).innerHTML=FourofAkindScore
+        document.getElementById("fourOfAkinds"+playerNumber).innerHTML=FourofAkindScore;
     }
     if(scoreTable[8]===undefined) {
         let FullhouceScore = calculateFullhouce(dice);
-        document.getElementById("Fullhouces"+playerNumber).innerHTML=FullhouceScore
+        document.getElementById("Fullhouces"+playerNumber).innerHTML=FullhouceScore;
     }
     if(scoreTable[9]===undefined) {
         let SmallstraightScore = calculateSmallstraight(dice);
-        document.getElementById("Smallstraight"+playerNumber).innerHTML=SmallstraightScore
+        document.getElementById("Smallstraight"+playerNumber).innerHTML=SmallstraightScore;
     }
     if(scoreTable[10]===undefined) {
         let LargestraightScore = calculateLargestraight(dice);
-        document.getElementById("Largestraight"+playerNumber).innerHTML=LargestraightScore
+        document.getElementById("Largestraight"+playerNumber).innerHTML=LargestraightScore;
     }
     if(scoreTable[11]===undefined) {
         let ChanceScore = calculateChances(dice);
-        document.getElementById("Chance"+playerNumber).innerHTML=ChanceScore
+        document.getElementById("Chance"+playerNumber).innerHTML=ChanceScore;
     }
     if(scoreTable[12]===undefined) {
         let YachtzeeScore = calculateYachtzee(dice);
-        document.getElementById("Yachtzee"+playerNumber).innerHTML=YachtzeeScore
+        document.getElementById("Yachtzee"+playerNumber).innerHTML=YachtzeeScore;
     }
 }
 ///Scoretable funtioneren
 scoreTableCells.forEach(function(cell){
-    cell.addEventListener("click".oncellclick);
+
 });
 function oncellclick(){
     let row=this.getAttribute("data-row");
@@ -428,4 +400,13 @@ function calculateclowerSectionScore(playerScore){
     let Yachtzee=playerScore[12]==undefined ? 0 : playerScore[12];
     lowerSectionScore=ThreeOfAkinds+fourOfAkinds+Fullhouces+Smallstraight+Largestraight+Chance+Yachtzee;
     return lowerSectionScore;
+}
+function switchPlayer() {
+    if (activePlayer === 'player 1') {
+        activePlayer = 'player 2';
+        console.log("Switched to player 2");
+    } else {
+        activePlayer = 'player 1';
+        console.log("Switched to player 1");
+    }
 }
