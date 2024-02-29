@@ -59,6 +59,9 @@ html,body{
     color:rgb(216,144,192);
     font-size: 12px;
   }
+  .lilblock:hover{
+    background-color: limegreen;
+  }
   .cell:first-child {
     width:60%;
     text-align: left;

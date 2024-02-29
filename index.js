@@ -2,411 +2,488 @@ let player1Score=[];
 let player2Score=[];
 let player1Dice=[];
 let player2Dice=[];
-let rollcount=0;
-let roundcount=0;
-let isplayeroneturn=true;
-// roll dice function
+let rollCount=0;
+let roundCount=0;
+let onlyPossibleRow="blank";
+let jokerCard=false;
+let isPlayerOneTurn=true;
+let transformValues=[
+[0,30],[-5,40],[0,35],[5,40],[0,30]
+];
 const player1Container=document.getElementById("player1Container");
 const player2Container=document.getElementById("player2Container");
 const diceElements=document.querySelectorAll(".dice");
-const rollbutton= document.getElementById("Roll");
-const scoreTable = document.querySelectorAll(".cell");
+const rollButton = document.getElementById("roll");
 const scoreTableCells=document.querySelectorAll(".cell");
-const allecells=document.querySelectorAll(".cell");
-let cells=[];
-selectcells();
-function selectcells(){
-    for(var i = 0; i < allecells.length;i++){
-        if(i%3==0){
-            continue
+rollButton.addEventListener("click",rollDice);
+let rollSound=new Audio("roll.wav");
+function rollDice() {
+  rollCount++;
+  let diceArr=[1,2,3,4,5];
+  let randomDice=[];
+  for (let i=0;i<diceArr.length;i++) {
+    randomDice.push(Math.floor(Math.random()*6)+1);
+  }
+  const playArea=document.getElementById("playArea");
+  const diceContainer=document.getElementById("player1Container");
+  let numDice=diceContainer.children.length;
+  let counter=0;
+  diceElements.forEach(function(diceElement,index){
+    if(diceElement.classList.contains("active")|| rollCount==1){
+      resetDicePositions();
+      const x = transformValues[index][0];
+      const y = transformValues[index][1];
+      setTimeout(function(){
+        counter++;
+        changeDiePosition(diceElement,x,y);
+        changeDiceFaces(randomDice);
+        if(counter==1) {
+          if (isPlayerOneTurn) writeTempValuesInScoreTable(player1Dice);
+          else writeTempValuesInScoreTable(player2Dice);
+       }
+        if(rollCount==3){
+          rollButton.disabled=true;
+          rollButton.style.opacity=0.5;
+
         }
-        cells.push(allecells[i])
+        rollSound.play();
+      },500);
     }
-}
-// forloop
-function rolldice(){
-    let die1;
-    let die2;
-    let die3;
-    let die4;
-    let die5;
-
-    const dice1 = document.getElementById("Dice-1");
-    const dice2 = document.getElementById("Dice-2");
-    const dice3 = document.getElementById("Dice-3");
-    const dice4 = document.getElementById("Dice-4");
-    const dice5 = document.getElementById("Dice-5");
-
-    rollcount++;
- randomDice=[];
-    die1 = randomNumber();
-    randomDice.push(die1);
-    dice1.src = "dice_images/Dice-" + die1 + ".png";
-
-    die2 = randomNumber();
-    randomDice.push(die2);
-    dice2.src = "dice_images/Dice-" + die2 + ".png";
-
-    die3 = randomNumber();
-    randomDice.push(die3);
-    dice3.src = "dice_images/Dice-" + die3 + ".png";
-
-    die4 = randomNumber();
-    randomDice.push(die4);
-    dice4.src = "dice_images/Dice-" + die4 + ".png";
-
-    die5 = randomNumber();
-    randomDice.push(die5);
-    dice5.src = "dice_images/Dice-" + die5 + ".png";
-}
-
-function randomNumber() {
-    let random = Math.floor(Math.random()*6)+1;
-    return random;
+  });
 }
 function resetDicePositions(){
-    diceElements.forEach(function(diceElement){
-        diceElement.style.transform="none";
-    })
+  diceElements.forEach(function(diceElement){
+    diceElement.style.transform="none";
+  })
 }
-function changediceFaces(randomDice) {
-    for (let i=0; i < diceElements.length;i++) {
-        if(rollcount ===1) diceElements[1].classList.add("active");
-        if(diceElements[i].classList.contains("active")) {
-            if(isplayeroneturn) player1Dice[i]=randomDice[i];
-            else player2Dice[i]=randomDice[i];
-
-            let face = diceElements[i].getElementsByClassName("face")[0];
-            face.src="dice"+randomDice[i];
-        }
-    }
+function changeDiePosition(diceElement,x,y){
+  let angle=135*Math.floor(Math.random()*10);
+  let diceRollDirection = -1;
+  if(!isPlayerOneTurn) diceRollDirection=1;
+  angle=135*Math.floor(Math.random()*10);
+  diceElement.style.transform=
+  "translateX("+
+  x+"vw) translateY("+diceRollDirection*y+
+  "vh) rotate(" + angle + "deg)";
 }
-function resetDicefaces() {
-    for(let i=0; i < diceElements.length;i++){
-        let face = diceElements[i].getElementsByClassName("face")[0];
-        diceElements[i].classList.remove("active");
-        let diceNumber=i+1;
-        face.src="dice"+diceNumber+".png";
+function changeDiceFaces(randomDice) {
+  for (let i=0; i < diceElements.length;i++) {
+    if(rollCount ===1) diceElements[i].classList.add("active");
+    if(diceElements[i].classList.contains("active")) {
+      if(isPlayerOneTurn) player1Dice[i]=randomDice[i];
+      else player2Dice[i]=randomDice[i]; 
+      let face = diceElements[i].getElementsByClassName("face")[0];
+      face.src="dice"+randomDice[i]+".png";
     }
+  }
+}
+function resetDiceFaces() {
+  for (let i=0;i<diceElements.length;i++){
+    let face = diceElements[i].getElementsByClassName("face")[0];
+    diceElements[i].classList.remove("active");
+    let diceNumber=i+1;
+    face.src="dice"+diceNumber+".png";
+  }
 }
 diceElements.forEach(function(diceElement,index){
-    diceElement.addEventListener("click",function(){
-        if(rollcount==0) return;
-        diceElement.classList.toggle("active");
-        if(!diceElement.classList.contains("active")){
-            diceElement.style.transform="none";
-        }
-        else {
-            const diceNumber=diceElement.id.charAt(3);
-            const x = transformvalues[diceNumber-1[0]];
-            const y = transformvalues[diceNumber-1[1]];
-            changeDicePosition(diceElement,x,y);
-        }
-    })
+  diceElement.addEventListener("click",function(){
+    if(rollCount==0) return;
+    diceElement.classList.toggle("active");
+    if(!diceElement.classList.contains("active")){
+      diceElement.style.transform="none";
+    }
+    else {
+      const diceNumber=diceElement.id.charAt(3);
+      const x = transformValues[diceNumber-1][0];
+      const y = transformValues[diceNumber-1][1];
+      changeDiePosition(diceElement,x,y);
+    }
+  })
 })
-// eerste gedeelde van scores
-function calculateOnes(dice) {
-    let score = 0;
-    dice.forEach(die => {
-        if (die === 1) {
-            score++;
-        }
+function writeTempValuesInScoreTable(dice) {
+  let scoreTable = [];
+  scoreTable = player1Score.slice();
+  let playerNumber = 1;
+  if (!isPlayerOneTurn) {
+    scoreTable = [];
+    playerNumber = 2;
+    scoreTable = player2Score.slice();
+  }
+  jokerCard=false;
+  onlyPossibleRow="blank";
+  let yahtzeeScore=calculateYahtzee(dice);
+  const yahtzeeElement=document.getElementById("yahtzee"+playerNumber);
+  if(scoreTable[12]===undefined){
+    yahtzeeElement.innerHTML=yahtzeeScore;
+  } else if(yahtzeeScore>0 && scoreTable[12]) {
+    yahtzeeScore=parseInt(yahtzeeElement.innerHTML)+100;
+    yahtzeeElement.innerHTML=yahtzeeScore;
+  }
+  if(yahtzeeScore>0 && scoreTable[dice[0]-1]!=undefined && scoreTable[12]!==undefined){
+    jokerCard=true;
+  }
+  if(yahtzeeScore>0 && scoreTable[dice[0]-1]==undefined && scoreTable[12]!==undefined){
+    onlyPossibleRow=dice[0];
+    writeTempValueOnOnlyPossibleRaw(dice,playerNumber);
+    return;
+  }
+  //------------------rrekenen of zo------------------------------------------
+  if (scoreTable[0] === undefined) {
+    let onesScore = calculateOnes(dice);
+    document.getElementById("ones" + playerNumber).innerHTML = onesScore;
+  }
+  if (scoreTable[1] === undefined) {
+    let twosScore = calculateTwos(dice);
+    document.getElementById("twos" + playerNumber).innerHTML = twosScore;
+  }
+  if (scoreTable[2] === undefined) {
+    let threesScore = calculateThrees(dice);
+    document.getElementById("threes" + playerNumber).innerHTML = threesScore;
+  }
+  if (scoreTable[3] === undefined) {
+    let foursScore = calculateFours(dice);
+    document.getElementById("fours" + playerNumber).innerHTML = foursScore;
+  }
+  if (scoreTable[4] === undefined) {
+    let fivesScore = calculateFives(dice);
+    document.getElementById("fives" + playerNumber).innerHTML = fivesScore;
+  }
+  if (scoreTable[5] === undefined) {
+    let sixesScore = calculateSixes(dice);
+    document.getElementById("sixes" + playerNumber).innerHTML = sixesScore;
+  }
+  if (scoreTable[6] === undefined) {
+    let threeOfAKindScore = calculateThreeOfAKind(dice);
+    document.getElementById("threeOfAKind" + playerNumber).innerHTML =
+      threeOfAKindScore;
+  }
+  if (scoreTable[7] === undefined) {
+    let fourOfAKindScore = calculateFourOfAKind(dice);
+    document.getElementById("fourOfAKind" + playerNumber).innerHTML =
+      fourOfAKindScore;
+  }
+  if (scoreTable[8] === undefined) {
+    let fullHouseScore = calculateFullHouse(dice);
+
+    document.getElementById("fullHouse" + playerNumber).innerHTML =
+      fullHouseScore;
+  }
+  if (scoreTable[9] === undefined) {
+    let smallStraightScore = jokerCard ? 30: calculateSmallStraight(dice);
+    document.getElementById("smallStraight" + playerNumber).innerHTML =
+      smallStraightScore;
+  }
+  if (scoreTable[10] === undefined) {
+    let largeStraightScore = jokerCard ? 40 : calculateLargeStraight(dice);
+    document.getElementById("largeStraight" + playerNumber).innerHTML =
+      largeStraightScore;
+  }
+  if (scoreTable[11] === undefined) {
+    let chanceScore = calculateChance(dice);
+    document.getElementById("chance" + playerNumber).innerHTML = chanceScore;
+  }
+}
+function writeTempValueOnOnlyPossibleRaw(dice,playerNumber) {
+  if(dice[0]==1) {
+    let score=calculateOnes(dice);
+    document.getElementById("ones"+playerNumber).innerHTML=score;
+  }
+  if(dice[0]==2) {
+    let score=calculateTwos(dice);
+    document.getElementById("twos"+playerNumber).innerHTML=score;
+  }
+  if(dice[0]==3) {
+    let score=calculateThrees(dice);
+    document.getElementById("threes"+playerNumber).innerHTML=score;
+  }
+  if(dice[0]==4) {
+    let score=calculateFours(dice);
+    document.getElementById("fours"+playerNumber).innerHTML=score;
+  }
+  if(dice[0]==5) {
+    let score=calculateFives(dice);
+    document.getElementById("fives"+playerNumber).innerHTML=score;
+  }
+  if(dice[0]==6) {
+    let score=calculateSixes(dice);
+    document.getElementById("sixes"+playerNumber).innerHTML=score;
+  }
+}
+scoreTableCells.forEach(function(cell){
+  cell.addEventListener("click",onCellClick);
+});
+function onCellClick(){
+  let row=this.getAttribute("data-row");
+  let column=this.getAttribute("data-column");
+  if(
+    rollCount==0 ||
+    row===null ||(onlyPossibleRow!="blank" && row!=onlyPossibleRow)
+  ) return;
+  if(isPlayerOneTurn && column==1){
+    player1Score[row-1]=parseInt(this.innerHTML);
+    let upperSectionScore1=calculateUpperSection(player1Score);
+    let bonusScore1=upperSectionScore1>63 ? 35 : 0;
+    let lowerSectionScore1=calculateLowerSectionScore(player1Score);
+    let totalScore1=upperSectionScore1+lowerSectionScore1+bonusScore1;
+    sum1.innerHTML=upperSectionScore1;
+    bonus1.innerHTML=bonusScore1;
+    total1.innerHTML=totalScore1;
+    this.removeEventListener("click",onCellClick);
+    this.style.color="green";
+    sum1.style.color="green";
+    bonus1.style.color="green";
+    total1.style.color="green";
+    changeTurn();
+  }
+  if(!isPlayerOneTurn && column==2){
+    player2Score[row-1]=parseInt(this.innerHTML);
+    let upperSectionScore2=calculateUpperSection(player2Score);
+    let bonusScore2=upperSectionScore2>63 ? 35 : 0;
+    let lowerSectionScore2=calculateLowerSectionScore(player2Score);
+    let totalScore2=upperSectionScore2+lowerSectionScore2+bonusScore2;
+    sum2.innerHTML=upperSectionScore2;
+    bonus2.innerHTML=bonusScore2;
+    total2.innerHTML=totalScore2;
+    this.removeEventListener("click",onCellClick);
+    this.style.color="green";
+    sum2.style.color="green";
+    bonus2.style.color="green";
+    total2.style.color="green";
+    changeTurn();
+  }
+}
+function changeTurn(){
+  roundCount++;
+  updateScoreTable();
+  resetDiceFaces();
+  isPlayerOneTurn=!isPlayerOneTurn;
+  rollCount=0;
+  if(isPlayerOneTurn){
+    const player2ContainerDice=player2Container.querySelectorAll(".dice");
+    player2ContainerDice.forEach((diceElement)=> {
+      diceElement.style.transform="none";
+      player2Container.removeChild(diceElement);
+      player1Container.appendChild(diceElement);
     });
-    return score;
+  }else {
+    const player1ContainerDice=player1Container.querySelectorAll(".dice");
+    player1ContainerDice.forEach((diceElement)=> {
+      diceElement.style.transform="none";
+      player1Container.removeChild(diceElement);
+      player2Container.appendChild(diceElement);
+    });
+}
+  if(roundCount==26)  {
+    calculateEndGameScore();
+    return;
+  }
+  rollButton.disabled=false;
+  rollButton.style.opacity=1;
+}
+function updateScoreTable(){
+  let scoreTable=[];
+  scoreTable=player1Score.slice();
+  let column =1 ;
+  if(!isPlayerOneTurn) {
+    scoreTable=[];
+    scoreTable=player2Score.slice();
+    column=2;
+  }
+  let scoreCells=document.querySelectorAll('[data-column="'+column+'"]');
+  for (let i=0;i<scoreCells .length;i++) {
+    if(scoreTable[i]===undefined) {
+      scoreCells[i].innerHTML="" ;
+    }
+  }
+}
+function calculateOnes(dice) {
+  let score=0;
+  for (let i=0;i<dice.length;i++){
+    if(dice[i]===1) {
+      score+=1;
+    }
+  }
+  return score;
 }
 function calculateTwos(dice) {
-    let score=0;
-    for (let i=0; i < dice.length; i++){
-        if(dice[i]===2) {
-            score+=2;
-        }
+  let score=0;
+  for (let i=0;i<dice.length;i++){
+    if(dice[i]===2) {
+      score+=2;
     }
-    return score;
+  }
+  return score;
 }
-
 function calculateThrees(dice) {
-    let score=0;
-    for (let i=0; i < dice.length; i++){
-        if(dice[i]===3) {
-            score+=3;
-        }
+  let score=0;
+  for (let i=0;i<dice.length;i++){
+    if(dice[i]===3) {
+      score+=3;
     }
-    return score;
+  }
+  return score;
 }
-
-function calculatefours(dice) {
-    let score=0;
-    for (let i=0; i < dice.length; i++){
-        if(dice[i]===4) {
-            score+=4;
-        }
+function calculateFours(dice) {
+  let score=0;
+  for (let i=0;i<dice.length;i++){
+    if(dice[i]===4) {
+      score+=4;
     }
-    return score;
+  }
+  return score;
 }
-
 function calculateFives(dice) {
-    let score=0;
-    for (let i=0; i < dice.length; i++){
-        if(dice[i]===5) {
-            score+=5;
-        }
+  let score=0;
+  for (let i=0;i<dice.length;i++){
+    if(dice[i]===5) {
+      score+=5;
     }
-    return score;
+  }
+  return score;
 }
-
-function calculateSixs(dice) {
-    let score=0;
-    for (let i=0; i < dice.length; i++){
-        if(dice[i]===6) {
-            score+=6;
-        }
+function calculateSixes(dice) {
+  let score=0;
+  for (let i=0;i<dice.length;i++){
+    if(dice[i]===6) {
+      score+=6;
     }
-    return score;
+  }
+  return score;
 }
-
-// tweede gedeelde van scores
+function calculateChance(dice) {
+  let score=0;
+  for (let i=0;i<dice.length;i++){
+      score+=dice[i];
+  }
+  return score;
+}
+function calculateYahtzee(dice) {
+  let firstDie=dice[0];
+  let score=50;
+  for (let i=0;i<dice.length;i++){
+    if(dice[i]!==firstDie) {
+      score=0;
+    }
+  }
+  return score;
+}
 function calculateThreeOfAKind(dice) {
-    let score = 0;
-    for (let i = 0; i < dice.length; i++) {
-        let count = 1;
-
-        for (let j = 0; j < dice.length; j++) {
-            if (i !== j && dice[i] === dice[j]) {
-                count++;
-            }
-        }
-        if (count >= 3) {
-            score = dice.reduce((acc, val) => acc + val);
-            break;
-        }
+  let score=0;
+  for(let i=0;i<dice.length;i++){
+    let count=1;
+    for(let j=0;j<dice.length;j++) {
+      if(j!==i && dice[i]===dice[j]){
+        count++;
+      }
     }
-    return score;
+    if(count>=3) {
+      score=dice.reduce((acc,val)=>acc+val);
+      break;
+    }
+  }
+  return score;
 }
-
 function calculateFourOfAKind(dice) {
-    let score = 0;
-
-    for (let i = 0; i < dice.length; i++) {
-        let count = 1;
-        for (let j = 0; j < dice.length; j++) {
-            if (i !== j && dice[i] === dice[j]) {
-                count++;
-            }
-        }
-        if (count >= 4) {
-            score = dice.reduce((acc, val) => acc + val);
-            break;
-        }
+  let score=0;
+  for(let i=0;i<dice.length;i++){
+    let count=1;
+    for(let j=0;j<dice.length;j++) {
+      if(j!==i && dice[i]===dice[j]){
+        count++;
+      }
     }
+    if(count>=4) {
+      score=dice.reduce((acc,val)=>acc+val);
+      break;
+    }
+  }
+  return score;
+}
+function calculateFullHouse(dice) {
+  let score=0;
+  let diceCopy=dice.slice();
+  diceCopy.sort();
+  if(
+    (diceCopy[0]==diceCopy[1] &&
+      diceCopy[1]==diceCopy[2] &&
+      diceCopy[3]==diceCopy[4]  
+      ) ||
+        (diceCopy[0]==diceCopy[1] &&
+          diceCopy[2]==diceCopy[3] &&
+          diceCopy[3]==diceCopy[4]  
+          )    
+  ) {
+    score=25;
     return score;
+  }
+  return score;
 }
-
-function calculateFullhouce(dice){
-    let score=0;
-    let dicecopy=dice.slice();
-    dicecopy.sort();
-    if(
-        (dicecopy[0]==dicecopy[1] &&
-        dicecopy[1]==dicecopy[2] &&
-        dicecopy[3]==dicecopy[4]
-        ) ||
-        (dicecopy[0]==dicecopy[1] &&
-            dicecopy[1]==dicecopy[2] &&
-            dicecopy[3]==dicecopy[4] )
-    ){
-        score=25;
-        return score;
-    }
-    return score;
+function calculateSmallStraight(dice) {
+  let score=0;
+  let diceCopy=[...new Set(dice)];
+  diceCopy.sort();
+  if(
+    (diceCopy[1]==diceCopy[0]+1 &&
+      diceCopy[2]==diceCopy[1]+1 &&
+      diceCopy[3]==diceCopy[2] +1 
+      ) ||
+        (diceCopy[2]==diceCopy[1]+1 &&
+          diceCopy[3]==diceCopy[2]+1 &&
+          diceCopy[4]==diceCopy[3] +1 
+          )    
+  ) {
+    score=30;
+  }
+  return score;
 }
-
-function calculateSmallstraight(dice){
-    let score=0;
-    let dicecopy=[...new setInterval(dice)];
-    dicecopy.sort();
-    if(
-        (dicecopy[1]==dicecopy[0]+1 &&
-        dicecopy[2]==dicecopy[1]+1 &&
-        dicecopy[3]==dicecopy[2]+1
-        ) ||
-        (dicecopy[2]==dicecopy[1]+1 &&
-            dicecopy[3]==dicecopy[2]+1 &&
-            dicecopy[4]==dicecopy[3]+1 )
-    ){
-        score=30;
-        return score;
-    }
-    return score;
+function calculateLargeStraight(dice) {
+  let score=0;
+  let diceCopy=[...new Set(dice)];
+  diceCopy.sort();
+  if(
+    (diceCopy[1]==diceCopy[0]+1 &&
+      diceCopy[2]==diceCopy[1]+1 &&
+      diceCopy[3]==diceCopy[2] +1 &&
+      diceCopy[4]==diceCopy[3] +1
+      ) 
+  ) {
+    score=40;
+  }
+  return score;
 }
-
-function calculateLargestraight(dice){
-    let score=0;
-    let dicecopy=[...new setInterval(dice)];
-    dicecopy.sort();
-    if(
-        (dicecopy[1]==dicecopy[0]+1 &&
-        dicecopy[2]==dicecopy[1]+1 &&
-        dicecopy[3]==dicecopy[2]+1
-        )
-    ){
-        score=40;
-        return score;
-    }
-    return score;
+function calculateUpperSection(playerScore){
+  let score=0;
+  let ones=playerScore[0]==undefined ? 0 : playerScore[0];
+  let twos=playerScore[1]==undefined ? 0 : playerScore[1];
+  let threes=playerScore[2]==undefined ? 0 : playerScore[2];
+  let fours=playerScore[3]==undefined ? 0 : playerScore[3];
+  let fives=playerScore[4]==undefined ? 0 : playerScore[4];
+  let sixes=playerScore[5]==undefined ? 0 : playerScore[5];
+  score=ones+twos+threes+fours+fives+sixes;
+  return score;
 }
-function calculateChances(dice) {
-    let score=0;
-    for (let i=0; i < dice.length; i++){
-        score+=dice[i];
-    }
-    return score;
+function calculateLowerSectionScore(playerScore){
+  let lowerSectionScore=0;
+  let threeOfAKind=playerScore[6]===undefined ? 0 : playerScore[6];
+  let fourOfAKind=playerScore[7]===undefined ? 0 : playerScore[7];
+  let fullHouse=playerScore[8]===undefined ? 0 : playerScore[8];
+  let smallStraight=playerScore[9]===undefined ? 0 : playerScore[9];
+  let largeStraight=playerScore[10]===undefined ? 0 : playerScore[10];
+  let chance=playerScore[11]===undefined ? 0 : playerScore[11];
+  let yahtzee=playerScore[12]===undefined ? 0 : playerScore[12];
+  if(yahtzee>0) {
+    playerNumber=isPlayerOneTurn ? 1 : 2;
+    yahtzee=parseInt(document.getElementById("yahtzee"+playerNumber).innerHTML);
+  }
+  lowerSectionScore=threeOfAKind+fourOfAKind+fullHouse+smallStraight+largeStraight
+  + chance+yahtzee;
+  return lowerSectionScore;
 }
-
-function calculateYachtzee(dice) {
-    let firstdie=dice[0];
-    let score=50;
-    for (let i=0; i < dice.length; i++){
-        if(dice[i]===firstdie) {
-            score=0;
-        }
-    }
-    return score;
-}
-function writeTempValuesInScoreTable(dice){
-    let scoreTable=[];
-    scoreTable=player1Score.slice();
-    let playerNumber = 1;
-    if(!isplayeroneturn){
-        scoreTable=[];
-        scoreTable=player2Score.slice();
-        playerNumber= 2;
-    }
-    if(scoreTable[0]===undefined) {
-        let onesScore = calculateOnes(dice);
-        document.getElementById("ones"+playerNumber).innerHTML=onesScore;
-    }
-    if(scoreTable[1]===undefined) {
-        let twosScore = calculateTwos(dice);
-        document.getElementById("twos"+playerNumber).innerHTML=twosScore;
-    }
-    if(scoreTable[2]===undefined) {
-        let threesScore = calculateThrees(dice);
-        document.getElementById("threes"+playerNumber).innerHTML=threesScore;
-    }
-    if(scoreTable[3]===undefined) {
-        let foursScore = calculatefours(dice);
-        document.getElementById("fours"+playerNumber).innerHTML=foursScore;
-    }
-    if(scoreTable[4]===undefined) {
-        let fivesScore = calculateFives(dice);
-        document.getElementById("fives"+playerNumber).innerHTML=fivesScore;
-    }
-    if(scoreTable[5]===undefined) {
-        let sixsScore = calculateSixs(dice);
-        document.getElementById("sixs"+playerNumber).innerHTML=sixsScore;
-    }
-    if(scoreTable[6]===undefined) {
-        let ThreeofakindScore = calculateThreeOfAKind(dice);
-        document.getElementById("ThreeOfAkinds"+playerNumber).innerHTML=ThreeofakindScore;
-    }
-    if(scoreTable[7]===undefined) {
-        let FourofAkindScore = calculateFourOfAkinds(dice);
-        document.getElementById("fourOfAkinds"+playerNumber).innerHTML=FourofAkindScore;
-    }
-    if(scoreTable[8]===undefined) {
-        let FullhouceScore = calculateFullhouce(dice);
-        document.getElementById("Fullhouces"+playerNumber).innerHTML=FullhouceScore;
-    }
-    if(scoreTable[9]===undefined) {
-        let SmallstraightScore = calculateSmallstraight(dice);
-        document.getElementById("Smallstraight"+playerNumber).innerHTML=SmallstraightScore;
-    }
-    if(scoreTable[10]===undefined) {
-        let LargestraightScore = calculateLargestraight(dice);
-        document.getElementById("Largestraight"+playerNumber).innerHTML=LargestraightScore;
-    }
-    if(scoreTable[11]===undefined) {
-        let ChanceScore = calculateChances(dice);
-        document.getElementById("Chance"+playerNumber).innerHTML=ChanceScore;
-    }
-    if(scoreTable[12]===undefined) {
-        let YachtzeeScore = calculateYachtzee(dice);
-        document.getElementById("Yachtzee"+playerNumber).innerHTML=YachtzeeScore;
-    }
-}
-///Scoretable funtioneren
-scoreTableCells.forEach(function(cell){
-
-});
-function oncellclick(){
-    let row=this.getAttribute("data-row");
-    let column=this.getAttribute("data-column");
-    if(
-        rollcount=0 ||
-        row===null
-    ) return;
-    if(isplayeroneturn && column==1){
-        player1Score[row-1]=parseInt(this.innerHTML);
-        let upperSectionScore1=calculateUpperSectionScore(player1Score);
-        let bonusScore1=upperSectionScore1>63 ? 35 : 0;
-        let lowerSectionScore1=calculatelowerSectionScore1(player1Score);
-        let totalScore1=upperSectionScore1+lowerSectionScore1+bonusScore1;
-        sum1.innerHTML=upperSectionScore1;
-        bonus1.innerHTML=bonusScore1;
-        total1.innerHTML=totalScore1;
-        this.style.color="green";
-        sum1.style.color="green";
-        bonus1.style.color="green";
-        total1.style.color="green";
-        changeTurn();
-    }
-    if(!isplayeroneturn && column==2){
-        player2Score[row-1]=parseInt(this.innerHTML);
-        let upperSectionScore2=calculateUpperSectionScore(player2Score);
-        let bonusScore2=upperSectionScore2>63 ? 35 : 0;
-        let lowerSectionScore2=calculatelowerSectionScore1(player2Score);
-        let totalScore2=upperSectionScore2+lowerSectionScore2+bonusScore2;
-        sum1.innerHTML=upperSectionScore2;
-        bonus1.innerHTML=bonusScore2;
-        total1.innerHTML=totalScore2;
-        this.style.color="green";
-        sum2.style.color="green";
-        bonus2.style.color="green";
-        total2.style.color="green";
-        changeTurn();
-    }
-    return score;
-}
-//scores van upper and down sections bijelkaar
-function calculateUpperSectionScore(playerScore){
-    let score=0;
-    let ones=playerScore[0]==undefined ? 0 : playerScore[0];
-    let twos=playerScore[1]==undefined ? 0 : playerScore[1];
-    let threes=playerScore[2]==undefined ? 0 : playerScore[2];
-    let fours=playerScore[3]==undefined ? 0 : playerScore[3];
-    let fives=playerScore[4]==undefined ? 0 : playerScore[4];
-    let sixs=playerScore[5]==undefined ? 0 : playerScore[5];
-    score=ones+twos+threes+fours+fives+sixs;
-    return score;
-}
-function calculateclowerSectionScore(playerScore){
-    let lowerSectionScore=0;
-    let ThreeOfAkinds=playerScore[6]==undefined ? 0 : playerScore[6];
-    let fourOfAkinds=playerScore[7]==undefined ? 0 : playerScore[7];
-    let Fullhouces=playerScore[8]==undefined ? 0 : playerScore[8];
-    let Smallstraight=playerScore[9]==undefined ? 0 : playerScore[9];
-    let Largestraight=playerScore[10]==undefined ? 0 : playerScore[10];
-    let Chance=playerScore[11]==undefined ? 0 : playerScore[11];
-    let Yachtzee=playerScore[12]==undefined ? 0 : playerScore[12];
-    lowerSectionScore=ThreeOfAkinds+fourOfAkinds+Fullhouces+Smallstraight+Largestraight+Chance+Yachtzee;
-    return lowerSectionScore;
-}
-function switchPlayer() {
-    if (activePlayer === 'player 1') {
-        activePlayer = 'player 2';
-        console.log("Switched to player 2");
-    } else {
-        activePlayer = 'player 1';
-        console.log("Switched to player 1");
-    }
+function calculateEndGameScore() {
+  let player1Total=parseInt(document.getElementById("total1").innerHTML);
+  let player2Total=parseInt(document.getElementById("total2").innerHTML);
+  const endGameMessage=player1Total==player2Total ? "Draw" : player1Total>player2Total ? "Player1 Wins" : "Player2 Wins";
+  document.getElementById("endGameMessage").innerHTML=endGameMessage;
+  rollButton.disabled=true;
+  rollButton.style.opacity=0.5;
 }
